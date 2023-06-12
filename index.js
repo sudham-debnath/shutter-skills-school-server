@@ -37,13 +37,25 @@ async function run() {
 
     
     //Users API
+
+    app.get("/users", async (req, res) => {
+      const result = await usersCollection.find().toArray();
+      res.send(result);
+    });
+
     app.post("/users", async (req, res) => {
       const user = req.body;
-      console.log(user);
+      const query = { email: user.email }
+      const existingUser = await usersCollection.findOne(query);
+      if (existingUser) {
+        return res.send({message : "User already exists"})
+      }
       const result = await usersCollection.insertOne(user);
       res.send(result);
     });
 
+
+   
 
 
 
@@ -55,7 +67,7 @@ async function run() {
       res.send(result);
     });
 
-    // Get (Read) a class from database
+    // Get (Read) a classes from database
     app.get("/all-classes", async (req, res) => {
       const classes = classCollection.find();
       const result = await classes.toArray();
