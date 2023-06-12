@@ -34,7 +34,6 @@ async function run() {
     const classCollection = client.db("classManager").collection("classes");
     const usersCollection = client.db("classManager").collection("users");
 
-
     
     //Users API
     app.get("/users", async (req, res) => {
@@ -70,8 +69,6 @@ async function run() {
 
    
 
-
-
     // Insert (Create) a class to database
     app.post("/add-class", async (req, res) => {
       const data = req.body;
@@ -100,6 +97,19 @@ async function run() {
       const result = await classCollection.updateOne(filter, updatedDoc);
       res.send(result);
     });
+
+    //Delete a class data using id
+    app.delete("/class/:id", async (req, res) => {
+      try {
+        const id = req.params.id;
+        const filter = { _id: new ObjectId(id) };
+        const result = await classCollection.deleteOne(filter);
+        res.send(result);
+      } catch (err) {
+        console.log(err.message);
+      }
+    });
+
 
 
 
