@@ -55,7 +55,7 @@ async function run() {
 
 
     //Admin API
-    app.patch("users/admin/:id", async (req, res) => { 
+    app.patch("/users/admin/:id", async (req, res) => { 
       const id = req.params.id;
       const filter = { _id: new ObjectId(id) };
       const updateDoc = {
@@ -84,6 +84,20 @@ async function run() {
     app.get("/all-classes", async (req, res) => {
       const classes = classCollection.find();
       const result = await classes.toArray();
+      res.send(result);
+    });
+
+    //Update a class data using id
+    app.patch("/class/:id", async (req, res) => {
+      const id = req.params.id;
+      const updateClassData = req.body;
+      const filter = { _id: new ObjectId(id) };
+      const updatedDoc = {
+        $set: {
+          ...updateClassData,
+        },
+      };
+      const result = await classCollection.updateOne(filter, updatedDoc);
       res.send(result);
     });
 
