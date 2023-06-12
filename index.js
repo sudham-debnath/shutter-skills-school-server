@@ -31,21 +31,22 @@ async function run() {
     await client.connect();
 
 
-    const classes = [
-      {
-        id: 1,
-        image: 'class1.jpg',
-        name: 'Class 1',
-        instructor: 'John Doe',
-        availableSeats: 10,
-        price: 50
-      },
-      // Add more classes here...
-    ];
-    
-    app.get('/classes', (req, res) => {
-      // Return the classes data as JSON
-      res.json(classes);
+    const classCollection = client.db("classManager").collection("classes");
+
+
+    // Insert (Create) a class to database
+    app.post("/add-class", async (req, res) => {
+      const data = req.body;
+      console.log(data);
+      const result = await classCollection.insertOne(data);
+      res.send(result);
+    });
+
+    // Get (Read) a class from database
+    app.get("/all-classes", async (req, res) => {
+      const classes = classCollection.find();
+      const result = await classes.toArray();
+      res.send(result);
     });
 
 
