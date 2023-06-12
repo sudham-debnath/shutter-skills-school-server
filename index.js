@@ -32,6 +32,19 @@ async function run() {
 
 
     const classCollection = client.db("classManager").collection("classes");
+    const usersCollection = client.db("classManager").collection("users");
+
+
+    
+    //Users API
+    app.post("/users", async (req, res) => {
+      const user = req.body;
+      console.log(user);
+      const result = await usersCollection.insertOne(user);
+      res.send(result);
+    });
+
+
 
 
     // Insert (Create) a class to database
